@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nl-blog
+  name: nl-blog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nl-blog
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: nl-blog
+    spec:
+      containers:
+      - image: localhost:5000/nl-blog
+        name: nl-lara-4r6vm
+        resources: {}
