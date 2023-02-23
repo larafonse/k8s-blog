@@ -2,11 +2,12 @@
 
 .PHONY: run_website install_kind install_kubectl create_kind_cluster \
 	create_docker_registry connect_registry_to_kind_network \
-	connect_registry_to_kind create_kind_cluster_with_registry
+	connect_registry_to_kind create_kind_cluster_with_registry build_website \
+	apply_ingress_controller
 
 run_website:
 	docker build -t nl-blog . && \
-		docker run -p 5000:80 -d --name nl-blog --rm nl-blog
+		docker run -p 5001:80 -d --name nl-blog --rm nl-blog
 
 install_kubectl:
 	brew install kubectl || true;
@@ -32,3 +33,12 @@ create_kind_cluster: install_kind install_kubectl create_docker_registry
 
 create_kind_cluster_with_registry:
 	$(MAKE) create_kind_cluster && $(MAKE) connect_registry_to_kind
+
+apply_ingress_controller:
+	kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+build_website: create_kind_cluster_with_registry apply_ingress_controller
+	docker build -t nl-blog . && \
+		docker tag nl-blog localhost:5000/nl-blog && \
+		docker push localhost:5000/nl-blog
+

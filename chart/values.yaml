@@ -1,0 +1,6 @@
+appName: nl-blog
+hostName: nl-blog.com
+imageName: localhost:5000/nl-blog
+replicas: 1
+serviceName: nl-blog-svc
+sourcePort: 80

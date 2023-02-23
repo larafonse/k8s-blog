@@ -1,16 +1,16 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nl-blog
+  name: {{ .Values.appName }}
 spec:
   rules:
-  - host: nl-blog.com
+  - host: {{ .Values.hostName }}
     http:
       paths:
       - backend:
           service:
-            name: nl-blog
+            name: {{ .Values.serviceName }}
             port:
-              number: 80
+              number: {{ .Values.sourcePort }}
         path: /
         pathType: Prefix
