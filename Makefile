@@ -3,7 +3,7 @@
 .PHONY: run_website install_kind install_kubectl create_kind_cluster \
 	create_docker_registry connect_registry_to_kind_network \
 	connect_registry_to_kind create_kind_cluster_with_registry build_website \
-	apply_ingress_controller
+	apply_ingress_controller install_app build_from_scratch
 
 run_website:
 	docker build -t nl-blog . && \
@@ -42,3 +42,8 @@ build_website: create_kind_cluster_with_registry apply_ingress_controller
 		docker tag nl-blog localhost:5000/nl-blog && \
 		docker push localhost:5000/nl-blog
 
+install_app: 
+	helm upgrade --atomic --install nl-blog-website ./chart
+
+build_from_scratch: build_website install_app
+	echo "all done"
